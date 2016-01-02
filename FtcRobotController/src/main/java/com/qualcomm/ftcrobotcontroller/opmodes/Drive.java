@@ -61,9 +61,9 @@ public class Drive extends OpMode {
   @Override
   public void init() {
       dbr = hardwareMap.dcMotor.get("drive.back.right");
-      dbl = hardwareMap.dcMotor.get("drive.front.left");
+      dbl = hardwareMap.dcMotor.get("drive.back.left");
       dfr = hardwareMap.dcMotor.get("drive.front.right");
-      dfl = hardwareMap.dcMotor.get("drive.back.left");
+      dfl = hardwareMap.dcMotor.get("drive.front.left");
       rbr = hardwareMap.dcMotor.get("rotate.back.right");
       rbl = hardwareMap.dcMotor.get("rotate.back.left");
       rfr = hardwareMap.dcMotor.get("rotate.front.right");
@@ -86,12 +86,11 @@ public class Drive extends OpMode {
       driveleft = Range.clip(driveleft, -1, 1);
 
 
-    double [] driveValues = Utilities.controlArms(speed, xl2, yl2, xr2, xr2);
+    double [] driveValues = Utilities.controlArms(speed, 0, xl2, yl2, xr2, xr2);
       dbl.setPower(driveleft);
       dbr.setPower(driveright);
       dfl.setPower(driveleft);
       dfr.setPower(driveright);
-
 
     rbl.setPower(driveValues[0]);
     rbr.setPower(driveValues[1]);
