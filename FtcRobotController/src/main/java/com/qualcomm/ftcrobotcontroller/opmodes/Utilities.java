@@ -48,16 +48,21 @@ public class Utilities {
     }
     public static float[] getOr(SensorEvent event) {
         float[] rotVec = new float[3];
+        float[] or = new float[3];
+
         if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
             rotVec = event.values;
         }
 
         if (rotVec != null) {  //make sure we have it before calling stuff
             float orientation[] = new float[3];
-            SensorManager.getRotationMatrixFromVector(rotVec, orientation);
-            return orientation;
+
+            SensorManager.getRotationMatrixFromVector(orientation, rotVec);
+            SensorManager.getOrientation(orientation, or);
+            if (or == null) return rotVec;
+            return or;
         }
-        return null;
+        return new float[] {100, 100, 100};
     }
 
     public static double driveArmTrack(double speed, double ratio){

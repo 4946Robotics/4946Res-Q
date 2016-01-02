@@ -21,7 +21,7 @@ public class OrientOp extends OpMode implements SensorEventListener {
     private float azimuth = 0.0f;      // value in radians
     private float pitch = 0.0f;        // value in radians
     private float roll = 0.0f;         // value in radians
-
+    public int update = 0;
     private float[] rotVec;       // latest sensor values
 
 
@@ -71,6 +71,8 @@ public class OrientOp extends OpMode implements SensorEventListener {
         telemetry.addData("azimuth", Math.round(Math.toDegrees(azimuth)));
         telemetry.addData("pitch", Math.round(Math.toDegrees(pitch)));
         telemetry.addData("roll", Math.round(Math.toDegrees(roll)));
+        telemetry.addData("time", getRuntime());
+        telemetry.addData("Changed?", update);
     }
 
     /*
@@ -88,6 +90,8 @@ public class OrientOp extends OpMode implements SensorEventListener {
 
     public void onSensorChanged(SensorEvent event) {
         // we need sensor values to calculate orientation
+
+        update ++;
         float[] or = Utilities.getOr(event);
         azimuth = or[0];
         pitch = or[1];
