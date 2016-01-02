@@ -30,10 +30,8 @@
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
-import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -46,8 +44,9 @@ import com.qualcomm.robotcore.util.Range;
  * Turn on the IR beacon. The robot will now follow the IR beacon. <br>
  * To stop the robot, turn the IR beacon off. <br>
  */
-public class Drive extends OpMode {
+public class DriveTest extends OpMode {
     int speed = 100; //(out of 100)
+    double ratio = 1.0/40.0;
     DcMotor dbr;
     DcMotor dbl;
     DcMotor dfr;
@@ -61,9 +60,9 @@ public class Drive extends OpMode {
   @Override
   public void init() {
       dbr = hardwareMap.dcMotor.get("drive.back.right");
-      dbl = hardwareMap.dcMotor.get("drive.front.left");
+      dbl = hardwareMap.dcMotor.get("drive.back.left");
       dfr = hardwareMap.dcMotor.get("drive.front.right");
-      dfl = hardwareMap.dcMotor.get("drive.back.left");
+      dfl = hardwareMap.dcMotor.get("drive.front.left");
       rbr = hardwareMap.dcMotor.get("rotate.back.right");
       rbl = hardwareMap.dcMotor.get("rotate.back.left");
       rfr = hardwareMap.dcMotor.get("rotate.front.right");
@@ -81,28 +80,31 @@ public class Drive extends OpMode {
       float driveright = throttle - direction;
       float driveleft = throttle + direction;
 
+
       // clip the right/left values so that the values never exceed +/- 1
       driveright = Range.clip(driveright, -1, 1);
       driveleft = Range.clip(driveleft, -1, 1);
 
 
-    double [] driveValues = Utilities.controlArms(speed, xl2, yl2, xr2, xr2);
-      dbl.setPower(driveleft);
-      dbr.setPower(driveright);
-      dfl.setPower(driveleft);
-      dfr.setPower(driveright);
+    double [] rotValues = Utilities.controlArms(speed, ratio, xl2, yl2, xr2, xr2);
+      rbl.setPower(rotValues[0]);
+      rbr.setPower(rotValues[1]);
+      rfl.setPower(rotValues[2]);
+      rfr.setPower(rotValues[3]);
+
+      dbl.setPower(Range.clip((driveleft + rotValues[4]), -1, 1));
+      dbr.setPower(Range.clip((driveright+ rotValues[5]), -1, 1));
+      dfl.setPower(Range.clip((driveleft + rotValues[6]), -1, 1));
+      dfr.setPower(Range.clip((driveright + rotValues[7]), -1, 1));
 
 
-    rbl.setPower(driveValues[0]);
-    rbr.setPower(driveValues[1]);
-    rfl.setPower(driveValues[2]);
-    rfr.setPower(driveValues[3]);
 
 
 
-    telemetry.addData("throttle", throttle);
-    telemetry.addData("direction", direction);
-    telemetry.addData("test", getRuntime());
+
+    telemetry.addData("x rotation", direction);
+    telemetry.addData("y rotation", direction);
+    telemetry.addData("z rotation", getRuntime());
 }
 
 
