@@ -30,7 +30,7 @@ public class Utilities {
 
         driveRearLeft = driveArmTrack(speedRearLeft, ratio);
         driveRearRight= driveArmTrack(speedRearRight, ratio);
-        driveFrontLeft= driveArmTrack(speedFrontLeft, ratio);
+        driveFrontLeft= -driveArmTrack(speedFrontLeft, ratio);
         driveFrontRight= driveArmTrack(speedFrontRight, ratio);
 
 
@@ -38,7 +38,7 @@ public class Utilities {
     }
 
     public static double[] joyToArms(double x, double y){
-        double armLeft = 0, armRight=0;
+        double armLeft, armRight;
 
         armLeft = x/2 + y/2;
 
@@ -70,5 +70,44 @@ public class Utilities {
         double trackSpeed;
         trackSpeed = speed * ratio;
         return trackSpeed;
+    }
+
+    public static double[] selfLevel(int speed, double ratio, double xdiff, double ydiff, double x1, double y1, double x2, double y2){
+
+        /*if diff is positive, robot is tilting forward or to the right
+        *
+
+
+
+         */
+        double rotateRearLeft;
+        double rotateRearRight;
+        double rotateFrontLeft;
+        double rotateFrontRight;
+        double driveRearLeft;
+        double driveRearRight;
+        double driveFrontLeft;
+        double driveFrontRight;
+
+        double[] rear = joyToArms(x1,y1);
+        rotateRearLeft = speed*rear[0]/100.0  - xdiff/100.0 - ydiff/100.0;
+        rotateRearRight = speed*rear[1]/100.0 - xdiff/100.0 + ydiff/100.0;
+
+        double[] front = joyToArms(x2,y2);
+        rotateFrontLeft = speed*front[0]/100.0 + xdiff/100.0 - ydiff/100.0;
+        rotateFrontRight = speed*front[1]/100.0+ xdiff/100.0 + ydiff/100.0;
+
+
+
+
+        driveRearLeft = driveArmTrack(rotateRearLeft, ratio);
+        driveRearRight= driveArmTrack(rotateRearRight, ratio);
+        driveFrontLeft= driveArmTrack(rotateFrontLeft, ratio);
+        driveFrontRight= driveArmTrack(rotateFrontRight, ratio);
+
+
+
+        return new double[] {rotateRearLeft, rotateRearRight, rotateFrontLeft, rotateFrontRight, driveRearLeft, driveRearRight, driveFrontLeft, driveFrontRight};
+
     }
 }

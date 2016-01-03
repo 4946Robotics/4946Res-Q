@@ -46,7 +46,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 public class DriveTest extends OpMode {
     int speed = 100; //(out of 100)
-    double ratio = 1.0/40.0;
+    double ratio = 1.0/5;
     DcMotor dbr;
     DcMotor dbl;
     DcMotor dfr;
@@ -71,7 +71,7 @@ public class DriveTest extends OpMode {
 
   @Override
   public void loop() {
-      float throttle = -gamepad1.left_stick_y;
+      float throttle = gamepad1.left_stick_y;
       float direction = gamepad1.left_stick_x;
       float xl2 = gamepad2.left_stick_x;
       float yl2 = gamepad2.left_stick_y;
@@ -86,7 +86,7 @@ public class DriveTest extends OpMode {
       driveleft = Range.clip(driveleft, -1, 1);
 
 
-    double [] rotValues = Utilities.controlArms(speed, ratio, xl2, yl2, xr2, xr2);
+    double [] rotValues = Utilities.controlArms(speed, ratio, xl2, yl2, xr2, yr2);
       rbl.setPower(rotValues[0]);
       rbr.setPower(rotValues[1]);
       rfl.setPower(rotValues[2]);
