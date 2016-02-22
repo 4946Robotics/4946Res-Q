@@ -44,7 +44,7 @@ import com.qualcomm.robotcore.util.Range;
  * Turn on the IR beacon. The robot will now follow the IR beacon. <br>
  * To stop the robot, turn the IR beacon off. <br>
  */
-public class DriveTest extends OpMode {
+public class DriveV2 extends OpMode {
     int speed = 100; //(out of 100)
     double ratio = 1.0/5;
     DcMotor dbr;
@@ -71,8 +71,8 @@ public class DriveTest extends OpMode {
 
   @Override
   public void loop() {
-      float throttle = gamepad1.left_stick_y;
-      float direction = gamepad1.left_stick_x;
+      float throttle = gamepad1.left_stick_x;
+      float direction = gamepad1.left_stick_y;
       float xl2 = gamepad2.left_stick_x;
       float yl2 = gamepad2.left_stick_y;
       float xr2 = gamepad2.right_stick_x;
@@ -86,25 +86,25 @@ public class DriveTest extends OpMode {
       driveleft = Range.clip(driveleft, -1, 1);
 
 
-    double [] rotValues = Utilities.controlArms(speed, ratio, xl2, yl2, xr2, yr2);
+      double [] rotValues = Utilities.controlArms(speed, ratio, xl2, yl2, xr2, yr2);
       rbl.setPower(rotValues[0]);
       rbr.setPower(rotValues[1]);
       rfl.setPower(rotValues[2]);
       rfr.setPower(rotValues[3]);
 
-      dbl.setPower(Range.clip((driveleft + rotValues[4]), -1, 1));
-      dbr.setPower(Range.clip((driveright+ rotValues[5]), -1, 1));
-      dfl.setPower(Range.clip((driveleft + rotValues[6]), -1, 1));
-      dfr.setPower(Range.clip((driveright + rotValues[7]), -1, 1));
+      dbl.setPower(Range.clip((driveleft/1.33 + rotValues[4]), -1, 1));
+      dbr.setPower(Range.clip((driveright/1.33+ rotValues[5]), -1, 1));
+      dfl.setPower(Range.clip((-driveleft + rotValues[6]), -1, 1));
+      dfr.setPower(Range.clip((-driveright + rotValues[7]), -1, 1));
 
 
 
 
 
 
-    telemetry.addData("x rotation", direction);
-    telemetry.addData("y rotation", direction);
-    telemetry.addData("z rotation", getRuntime());
+    telemetry.addData("rot 3", rotValues[3]);
+    telemetry.addData("rot 7", rotValues[7]);
+    telemetry.addData("joy", xr2 + yr2);
 }
 
 

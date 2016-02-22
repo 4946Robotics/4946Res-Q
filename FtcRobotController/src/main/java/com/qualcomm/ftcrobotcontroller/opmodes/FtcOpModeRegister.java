@@ -63,8 +63,7 @@ public class FtcOpModeRegister implements OpModeRegister {
 
 
     manager.register("ServoTest", ServoTest.class);
-    manager.register("Working", Drive.class);
-    manager.register("Experimental", DriveTest.class);
+    manager.register("Working", DriveV2.class);
     manager.register("OrientOp", OrientOp.class);
 
   }

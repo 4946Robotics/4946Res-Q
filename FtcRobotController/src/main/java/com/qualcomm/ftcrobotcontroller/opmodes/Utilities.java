@@ -28,7 +28,7 @@ public class Utilities {
         speedFrontLeft = speed*front[0]/100.0;
         speedFrontRight = speed*front[1]/100.0;
 
-        driveRearLeft = driveArmTrack(speedRearLeft, ratio);
+        driveRearLeft = -driveArmTrack(speedRearLeft, ratio);
         driveRearRight= driveArmTrack(speedRearRight, ratio);
         driveFrontLeft= -driveArmTrack(speedFrontLeft, ratio);
         driveFrontRight= driveArmTrack(speedFrontRight, ratio);
