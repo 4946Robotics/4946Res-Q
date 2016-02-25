@@ -40,6 +40,14 @@ public class AutoV1 extends OpMode {
 
         Utilities.runAuto("drive forward");
 
+        Utilities.runAuto("press button");
+
+        Utilities.runAuto("drive backward");
+
+        Utilities.runAuto("drive left");
+
+
+
 
     }
 }

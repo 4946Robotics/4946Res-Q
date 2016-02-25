@@ -33,6 +33,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * Follow an IR Beacon
@@ -45,8 +46,11 @@ import com.qualcomm.robotcore.util.Range;
  * To stop the robot, turn the IR beacon off. <br>
  */
 public class DriveV2 extends OpMode {
+
+    boolean sWitch;
     int speed = 100; //(out of 100)
     double ratio = 1.0/5;
+    double old = 0;
     DcMotor dbr;
     DcMotor dbl;
     DcMotor dfr;
@@ -56,9 +60,15 @@ public class DriveV2 extends OpMode {
     DcMotor rfr;
     DcMotor rfl;
 
+    Servo transmission;
+    Servo zipflip;
+    Servo release;
+
 
   @Override
   public void init() {
+      transmission = hardwareMap.servo.get("transmission");
+      zipflip = hardwareMap.servo.get("zipflip");
       dbr = hardwareMap.dcMotor.get("drive.back.right");
       dbl = hardwareMap.dcMotor.get("drive.back.left");
       dfr = hardwareMap.dcMotor.get("drive.front.right");
@@ -71,12 +81,13 @@ public class DriveV2 extends OpMode {
 
   @Override
   public void loop() {
-      float throttle = gamepad1.left_stick_x;
-      float direction = gamepad1.left_stick_y;
+      float throttle = -gamepad1.left_stick_x;
+      float direction = -gamepad1.left_stick_y;
       float xl2 = gamepad2.left_stick_x;
       float yl2 = gamepad2.left_stick_y;
       float xr2 = gamepad2.right_stick_x;
       float yr2 = gamepad2.right_stick_y;
+
       float driveright = throttle - direction;
       float driveleft = throttle + direction;
 
@@ -98,13 +109,28 @@ public class DriveV2 extends OpMode {
       dfr.setPower(Range.clip((-driveright + rotValues[7]), -1, 1));
 
 
+      if (gamepad2.a && getRuntime()-old >= .2) {
+          sWitch = !sWitch;
+          old = getRuntime();
+
+      }
+
+      if (sWitch) transmission.setPosition(.9);
+
+      else transmission.setPosition(.6);
 
 
+      if (gamepad2.b) zipflip.setPosition(.9);
+      else zipflip.setPosition(.1);
 
 
-    telemetry.addData("rot 3", rotValues[3]);
+      //if (gamepad1.x && gamepad1.y) release.setPosition(1);
+      //else release.setPosition(0);
+
+
+      telemetry.addData("rot 3", rotValues[3]);
     telemetry.addData("rot 7", rotValues[7]);
-    telemetry.addData("joy", xr2 + yr2);
+    telemetry.addData("joy", getRuntime());
 }
 
 
