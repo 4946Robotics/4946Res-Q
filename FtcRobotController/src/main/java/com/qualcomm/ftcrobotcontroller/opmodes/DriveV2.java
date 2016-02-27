@@ -35,16 +35,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.Servo;
 
-/**
- * Follow an IR Beacon
- * <p>
- * How to use: <br>
- * Make sure the Modern Robotics IR beacon is off. <br>
- * Set it to 1200 at 180.  <br>
- * Make sure the side of the beacon with the LED on is facing the robot. <br>
- * Turn on the IR beacon. The robot will now follow the IR beacon. <br>
- * To stop the robot, turn the IR beacon off. <br>
- */
+
 public class DriveV2 extends OpMode {
 
     boolean sWitch;
@@ -57,8 +48,8 @@ public class DriveV2 extends OpMode {
     DcMotor dfl;
     DcMotor rbr;
     DcMotor rbl;
-    DcMotor rfr;
-    DcMotor rfl;
+    DcMotor rf;
+    DcMotor lift;
 
     Servo transmission;
     Servo zipflip;
@@ -69,14 +60,18 @@ public class DriveV2 extends OpMode {
   public void init() {
       transmission = hardwareMap.servo.get("transmission");
       zipflip = hardwareMap.servo.get("zipflip");
+      release = hardwareMap.servo.get("release");
       dbr = hardwareMap.dcMotor.get("drive.back.right");
       dbl = hardwareMap.dcMotor.get("drive.back.left");
       dfr = hardwareMap.dcMotor.get("drive.front.right");
       dfl = hardwareMap.dcMotor.get("drive.front.left");
       rbr = hardwareMap.dcMotor.get("rotate.back.right");
       rbl = hardwareMap.dcMotor.get("rotate.back.left");
-      rfr = hardwareMap.dcMotor.get("rotate.front.right");
-      rfl = hardwareMap.dcMotor.get("rotate.front.left");
+      rf = hardwareMap.dcMotor.get("rotate.front");
+      lift = hardwareMap.dcMotor.get("lift");
+
+
+
   }
 
   @Override
@@ -98,13 +93,12 @@ public class DriveV2 extends OpMode {
       double [] rotValues = Utilities.controlArms(speed, ratio, xl2, yl2, xr2, yr2);
       rbl.setPower(rotValues[0]);
       rbr.setPower(rotValues[1]);
-      rfl.setPower(rotValues[2]);
-      rfr.setPower(rotValues[3]);
+      rf.setPower(rotValues[2]);
 
-      dbl.setPower(Range.clip((throttlel/1.33 + rotValues[4]), -1, 1));
-      dbr.setPower(Range.clip((-throttler/1.33+ rotValues[5]), -1, 1));
-      dfl.setPower(Range.clip((-throttlel + rotValues[6]), -1, 1));
-      dfr.setPower(Range.clip((throttler+ rotValues[7]), -1, 1));
+      dbl.setPower(Range.clip((throttlel/1.33 + rotValues[3]), -1, 1));
+      dbr.setPower(Range.clip((-throttler/1.33+ rotValues[4]), -1, 1));
+      dfl.setPower(Range.clip((-throttlel + rotValues[5]), -1, 1));
+      dfr.setPower(Range.clip((throttler+ rotValues[6]), -1, 1));
 
 
       if (gamepad2.a && getRuntime()-old >= .2) {
@@ -122,15 +116,14 @@ public class DriveV2 extends OpMode {
       else zipflip.setPosition(.1);
 
 
-      //if (gamepad1.x && gamepad1.y) release.setPosition(1);
-      //else release.setPosition(0);
+      if (gamepad1.x && gamepad1.y) release.setPosition(1);
+      else release.setPosition(0.3);
 
+      telemetry.addData("time", getRuntime());
 
-      telemetry.addData("rot 3", rotValues[3]);
-    telemetry.addData("rot 7", rotValues[7]);
-    telemetry.addData("joy", getRuntime());
+      if (gamepad1.a)  lift.setPower(1);
+      else if (gamepad1.b) lift.setPower(-1);
+      else lift.setPower(0);
+    }
 }
-
-
-  }
 

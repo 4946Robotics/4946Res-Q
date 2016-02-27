@@ -12,8 +12,7 @@ public class Utilities {
     public static double[] controlArms(int speed, double ratio, double x1, double y1, double x2, double y2) {
         double speedRearLeft;
         double speedRearRight;
-        double speedFrontLeft;
-        double speedFrontRight;
+        double speedFront;
         double driveRearLeft;
         double driveRearRight;
         double driveFrontLeft;
@@ -24,17 +23,16 @@ public class Utilities {
         speedRearLeft = speed * rear[0] / 100.0;
         speedRearRight = speed * rear[1] / 100.0;
 
-        double[] front = joyToArms(x2, y2);
-        speedFrontLeft = speed * front[0] / 100.0;
-        speedFrontRight = speed * front[1] / 100.0;
+
+        speedFront = y2;
 
         driveRearLeft = -driveArmTrack(speedRearLeft, ratio);
         driveRearRight = driveArmTrack(speedRearRight, ratio);
-        driveFrontLeft = -driveArmTrack(speedFrontLeft, ratio);
-        driveFrontRight = driveArmTrack(speedFrontRight, ratio);
+        driveFrontLeft = -driveArmTrack(speedFront, ratio);
+        driveFrontRight = driveArmTrack(speedFront, ratio);
 
 
-        return new double[]{speedRearLeft, speedRearRight, speedFrontLeft, speedFrontRight, driveRearLeft, driveRearRight, driveFrontLeft, driveFrontRight};
+        return new double[]{speedRearLeft, speedRearRight, speedFront, driveRearLeft, driveRearRight, driveFrontLeft, driveFrontRight};
     }
 
     public static double[] joyToArms(double x, double y) {
