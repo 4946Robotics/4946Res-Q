@@ -81,20 +81,18 @@ public class DriveV2 extends OpMode {
 
   @Override
   public void loop() {
-      float throttle = -gamepad1.left_stick_x;
-      float direction = -gamepad1.left_stick_y;
+      float throttlel = gamepad1.left_stick_y;
+      float throttler = gamepad1.right_stick_y;
       float xl2 = gamepad2.left_stick_x;
       float yl2 = gamepad2.left_stick_y;
       float xr2 = gamepad2.right_stick_x;
       float yr2 = gamepad2.right_stick_y;
 
-      float driveright = throttle - direction;
-      float driveleft = throttle + direction;
+
 
 
       // clip the right/left values so that the values never exceed +/- 1
-      driveright = Range.clip(driveright, -1, 1);
-      driveleft = Range.clip(driveleft, -1, 1);
+
 
 
       double [] rotValues = Utilities.controlArms(speed, ratio, xl2, yl2, xr2, yr2);
@@ -103,10 +101,10 @@ public class DriveV2 extends OpMode {
       rfl.setPower(rotValues[2]);
       rfr.setPower(rotValues[3]);
 
-      dbl.setPower(Range.clip((driveleft/1.33 + rotValues[4]), -1, 1));
-      dbr.setPower(Range.clip((driveright/1.33+ rotValues[5]), -1, 1));
-      dfl.setPower(Range.clip((-driveleft + rotValues[6]), -1, 1));
-      dfr.setPower(Range.clip((-driveright + rotValues[7]), -1, 1));
+      dbl.setPower(Range.clip((throttlel/1.33 + rotValues[4]), -1, 1));
+      dbr.setPower(Range.clip((-throttler/1.33+ rotValues[5]), -1, 1));
+      dfl.setPower(Range.clip((-throttlel + rotValues[6]), -1, 1));
+      dfr.setPower(Range.clip((throttler+ rotValues[7]), -1, 1));
 
 
       if (gamepad2.a && getRuntime()-old >= .2) {

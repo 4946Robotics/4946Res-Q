@@ -131,22 +131,27 @@ public class Utilities {
 
          */
 
+        double[] drive = new double[4];
+
         String states[] = {
                 "drive forwards",
                 "drive backward",
                 "drive left",
                 "drive right",
-                "press button",
+                "stop",
         };
 
         if (state.equals(states[0])) {
             //  "drive forwards",
+
+            drive = new double[]{1,1,1,1};
 
 
         }
 
         if (state.equals(states[1])) {
             //  "drive backwards",
+            drive = new double[]{-1,-1,-1,-1};
 
 
         }
@@ -154,17 +159,22 @@ public class Utilities {
         if (state.equals(states[2])) {
             //  "drive left",
 
+            drive = new double[]{-1,-1,1,1};
 
         }
         if (state.equals(states[3])) {
             //"drive right",
+            drive = new double[]{1,1,-1,-1};
 
 
         }
         if (state.equals(states[4])) {
             //"press button"
-
+            drive = new double[]{0,0,0,0};
         }
-        return null;
+        else{
+            drive = new double[]{0,0,0,0};
+        }
+        return drive;
     }
 }

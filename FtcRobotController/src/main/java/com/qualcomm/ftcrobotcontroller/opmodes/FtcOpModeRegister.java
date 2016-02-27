@@ -65,5 +65,7 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register("Working", DriveV2.class);
     manager.register("OrientOp", OrientOp.class);
 
+    manager.register("Autonomous", AutoV1.class);
+
   }
 }
